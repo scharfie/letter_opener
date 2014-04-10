@@ -13,6 +13,10 @@ module LetterOpener
       messages.sort
     end
 
+    def self.to_html(mail, part = nil)
+      new(nil, mail, part).to_html
+    end
+
     def initialize(location, mail, part = nil)
       @location = location
       @mail = mail
@@ -39,8 +43,12 @@ module LetterOpener
       end
 
       File.open(filepath, 'w') do |f|
-        f.write ERB.new(template).result(binding)
+        f.write to_html
       end
+    end
+
+    def to_html
+      ERB.new(template).result(binding)
     end
 
     def template
